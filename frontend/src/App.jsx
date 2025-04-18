@@ -5,15 +5,24 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const bottomRef = useRef(null);
+  const [hasStarted, setHasStarted] = useState(false);
 
-  // Auto-scroll to bottom when messages update
+  const bottomRef = useRef(null);
+  const inputRef = useRef(null);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    inputRef.current?.focus();
   }, [messages]);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim()) return;
+
+    if (!hasStarted) setHasStarted(true);
 
     const userMessage = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
@@ -21,20 +30,23 @@ function App() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5321/test_openai_x", {
+      const endpoint = hasStarted ? "/messages_to_gpt" : "/summarise_web"; // Switch based on first message
+      const res = await fetch(`http://localhost:5321${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
       });
 
       const data = await res.json();
-      const fullText = data.summary;
+      const fullText = data.response;
       const newIndex = messages.length + 1;
 
       // Add empty assistant message
       setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
-      // Simulate typing one character at a time
+      // Switch endpoint after first send
+
+      // Simulate typing
       let i = 0;
       const interval = setInterval(() => {
         setMessages((prev) => {
@@ -48,9 +60,9 @@ function App() {
         i++;
         if (i === fullText.length) {
           clearInterval(interval);
-          setLoading(false); // Hide typing indicator after completion
+          setLoading(false);
         }
-      }, 10); // Typing speed
+      }, 10);
     } catch (err) {
       console.error("Error talking to backend:", err);
       setLoading(false);
@@ -82,10 +94,12 @@ function App() {
 
       <div className="input-area">
         <input
+          ref={inputRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type a message..."
+          placeholder={hasStarted ? "Type a message..." : "Type in a URL..."}
+          autoFocus
         />
         <button onClick={handleSend}>Send</button>
       </div>

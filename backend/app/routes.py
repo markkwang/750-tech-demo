@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from .crawler import extract_text_from_url
-from .summariser import ai_summarise_text, test_openai
+from .summariser import ai_analyse_text, test_openai
 
 bp = Blueprint('main', __name__)
 
@@ -14,30 +14,46 @@ def crawler():
     page_text = extract_text_from_url(url)
     return jsonify({"text": page_text})
 
-@bp.route("/test_openai_x", methods=["POST"])
+@bp.route("/test_openai_x", methods=["GET"])
 def openai_x():
+    data = request.get_json()
+    print(data)
     prompt = "Expand the following text: 'The quick brown fox jumps over the lazy dog.'"
-    summary = test_openai(prompt)
-    return jsonify({"summary": summary})
+    response = test_openai(prompt)
+    return jsonify({"response": response})
 
-@bp.route("/test_openai_y", methods=["POST"])
+@bp.route("/test_openai_y", methods=["GET"])
 def openai_y():
     prompt = "Now, repeat the prevous answer. Then, expand it more."
-    summary = test_openai(prompt)
-    return jsonify({"summary": summary})
+    response = test_openai(prompt)
+    return jsonify({"response": response})
 
-@bp.route("/summarise", methods=["POST"])
+@bp.route("/summarise_web", methods=["POST"])
 def summarise():
-    pass
-    # data = request.get_json()
-    # url = data.get("url")
 
-    # if not url:
-    #     return jsonify({"error": "Missing URL"}), 400
+    data = request.get_json()
+    url = data.get("message")
 
-    # try:
-    #     page_text = extract_text_from_url(url)
-    #     summary = summarise_text(page_text, current_app.config["OPENAI_API_KEY"])
-    #     return jsonify({"summary": summary})
-    # except Exception as e:
-    #     return jsonify({"error": str(e)}), 500
+    if not url:
+        return jsonify({"response": "Missing message"}), 400
+    
+    try:
+        page_text = extract_text_from_url(url)
+        response = ai_analyse_text(page_text)
+        return jsonify({"response": response})
+    except Exception as e:
+        return jsonify({"response": str(e)}), 500
+    
+@bp.route("/messages_to_gpt", methods=["POST"])
+def messages_to_gpt():
+    data = request.get_json()
+    messages = data.get("message")
+
+    if not messages:
+        return jsonify({"response": "Missing messages"}), 400
+
+    try:
+        response = ai_analyse_text(messages)
+        return jsonify({"response": response})
+    except Exception as e:
+        return jsonify({"response": str(e)}), 500
