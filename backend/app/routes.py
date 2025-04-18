@@ -14,13 +14,13 @@ def crawler():
     page_text = extract_text_from_url(url)
     return jsonify({"text": page_text})
 
-@bp.route("/test_openai_x", methods=["GET"])
+@bp.route("/test_openai_x", methods=["POST"])
 def openai_x():
     prompt = "Expand the following text: 'The quick brown fox jumps over the lazy dog.'"
     summary = test_openai(prompt)
     return jsonify({"summary": summary})
 
-@bp.route("/test_openai_y", methods=["GET"])
+@bp.route("/test_openai_y", methods=["POST"])
 def openai_y():
     prompt = "Now, repeat the prevous answer. Then, expand it more."
     summary = test_openai(prompt)
