@@ -39,7 +39,7 @@ def extract_text_from_url_login(url, secure_url):
     
     request1 = requests.post(url, data=example_account_payload)
 
-    request2 = requests.post(secure_url)
+    request2 = requests.get(secure_url)
 
     map = {
         "request1": request1.text,

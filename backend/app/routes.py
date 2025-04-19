@@ -50,7 +50,7 @@ def crawler_session():
     """
     return Response(pretty, content_type="text/html")
 
-@bp.route("/test_openai_x", methods=["GET"])
+@bp.route("/test_openai", methods=["GET"])
 def openai_x():
     prompt = "Expand the following text: 'The quick brown fox jumps over the lazy dog.'"
     response = test_openai(prompt)
