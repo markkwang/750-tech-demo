@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, Response
 from .crawler import extract_text_from_url_all, extract_text_from_url_customised, extract_text_from_url_login, extract_text_from_url_session, extract_text_from_url_raw
 from .summariser import ai_analyse_text, test_openai
 from markupsafe import escape
+import json
 
 bp = Blueprint('main', __name__)
 
@@ -73,22 +74,6 @@ def openai_x():
     prompt = "Expand the following text: 'The quick brown fox jumps over the lazy dog.'"
     response = test_openai(prompt)
     return jsonify({"response": response})
-
-@bp.route("/summarise_web", methods=["POST"])
-def summarise():
-
-    data = request.get_json()
-    url = data.get("message")
-
-    if not url:
-        return jsonify({"response": "Missing message"}), 400
-    
-    try:
-        page_text = extract_text_from_url_all(url)
-        response = ai_analyse_text(page_text)
-        return jsonify({"response": response})
-    except Exception as e:
-        return jsonify({"response": str(e)}), 500
     
 @bp.route("/messages_to_gpt", methods=["POST"])
 def messages_to_gpt():
@@ -99,7 +84,11 @@ def messages_to_gpt():
         return jsonify({"response": "Missing messages"}), 400
 
     try:
-        response = ai_analyse_text(messages)
+        if messages.startswith("https"):
+            page_text = extract_text_from_url_all(messages)
+            response = ai_analyse_text(json.dumps(page_text)) 
+        else:
+            response = ai_analyse_text(messages)
         return jsonify({"response": response})
     except Exception as e:
         return jsonify({"response": str(e)}), 500
