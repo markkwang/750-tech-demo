@@ -71,7 +71,7 @@ def crawler_session():
 
 @bp.route("/test_openai", methods=["GET"])
 def openai_x():
-    prompt = "Expand the following text: 'The quick brown fox jumps over the lazy dog.'"
+    prompt = "'The quick and nimble brown fox, full of energy and curiosity, gracefully leaps over the sleepy, sluggish dog who lies basking in the warm afternoon sun without a care in the world.'"
     response = test_openai(prompt)
     return jsonify({"response": response})
     
