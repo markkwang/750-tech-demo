@@ -1,4 +1,4 @@
-# 750-tech-demo **🧠 Web Summariser**
+# 750-Tech-Demo **🧠 Web Summariser**
 
 A fullstack application that allows users to **input a website URL**, then scrapes and summarises the content using **Flask**, **BeautifulSoup**, and **OpenAI GPT-4.1-mini**.
 
