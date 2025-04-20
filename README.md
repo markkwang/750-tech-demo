@@ -1,6 +1,4 @@
-# 732-tech-demo
-
-# 🧠 Web Summariser: Flask + React + OpenAI
+# 732-tech-demo - Web Summariser
 
 A fullstack application that allows users to **input a website URL**, then scrapes and summarises the content using **Flask**, **BeautifulSoup**, and **OpenAI GPT-4.1-mini**.
 
