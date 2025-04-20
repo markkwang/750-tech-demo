@@ -30,8 +30,8 @@ function App() {
     setLoading(true);
 
     try {
-      const endpoint = hasStarted ? "/messages_to_gpt" : "/summarise_web"; // Switch based on first message
-      const res = await fetch(`http://localhost:5321${endpoint}`, {
+      // const endpoint = hasStarted ? "/messages_to_gpt" : "/summarise_web"; // Switch based on first message
+      const res = await fetch(`http://localhost:5321/messages_to_gpt`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
