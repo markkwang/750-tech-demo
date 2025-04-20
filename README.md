@@ -62,6 +62,19 @@ npm install
 npm run dev
 ```
 
+### 3. Open the Website
+
+By default:
+
+- The **frontend** runs on [http://localhost:5173](http://localhost:5173)
+- The **backend** runs on [http://localhost:5321](http://localhost:5321)
+
+> **Important:**  
+> Make sure that **ports 5173 and 5321 are not already in use** on your machine.  
+> If they are, you can close the processes using them.
+
+Once both servers are running, open your browser at [http://localhost:5173](http://localhost:5173) to use the app.
+
 ## 📝 How to Use the App
 
 1. **Enter a Valid URL**  
