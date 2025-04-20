@@ -2,7 +2,7 @@
 
 A fullstack application that allows users to **input a website URL**, then scrapes and summarises the content using **Flask**, **BeautifulSoup**, and **OpenAI GPT-4.1-mini**.
 
-> Built with a focus on backend logic and AI integration, this project demonstrates scraping from static and authenticated sites, structured API design, and dynamic summarisation via GPT.
+> Built with a focus on backend logic and AI integration, this project demonstrates scraping from static and authenticated sites, structured API design, and summarisation via openai API.
 
 ---
 
