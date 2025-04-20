@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, Response
-from .crawler import extract_text_from_url_all, extract_text_from_url_customised, extract_text_from_url_login, extract_text_from_url_session
+from .crawler import extract_text_from_url_all, extract_text_from_url_customised, extract_text_from_url_login, extract_text_from_url_session, extract_text_from_url_raw
 from .summariser import ai_analyse_text, test_openai
 from markupsafe import escape
 
@@ -9,11 +9,29 @@ bp = Blueprint('main', __name__)
 def index():
     return jsonify({"message": "Welcome to the summariser API!"})
 
-@bp.route("/test_crawler_bbc", methods=["GET"])
-def crawler_bbc():
+@bp.route("/test_crawler_bbc_1", methods=["GET"])
+def crawler_bbc_1():
+    url = "https://www.bbc.com/"
+    page_text = extract_text_from_url_raw(url)
+    pretty = f"""
+    <h2>Request to bbc</h2>
+    <pre>{escape(page_text["url"])}</pre>
+    <h2>Content</h2>
+    <pre>{escape(page_text["html"])}</pre>
+    """
+    return Response(pretty, content_type="text/html")
+
+@bp.route("/test_crawler_bbc_2", methods=["GET"])
+def crawler_bbc_2():
     url = "https://www.bbc.com/"
     page_text = extract_text_from_url_all(url)
-    return jsonify({"text": page_text})
+    pretty = f"""
+    <h2>Request to bbc</h2>
+    <pre>{escape(page_text["url"])}</pre>
+    <h2>Content</h2>
+    <pre>{escape(page_text["html"])}</pre>
+    """
+    return Response(pretty, content_type="text/html")
 
 @bp.route("/test_crawler_filtered", methods=["GET"])
 def crawler_1():

@@ -1,6 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
 
+def extract_text_from_url_raw(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    formatted_html = soup.prettify()
+    return {
+        "url": url,
+        "html": formatted_html[:100000]  
+    }
+
 def extract_text_from_url_all(url):
     headers = {"User-Agent": "Mozilla/5.0"}
     response = requests.get(url, headers=headers, timeout=10)
@@ -8,12 +17,14 @@ def extract_text_from_url_all(url):
 
     soup = BeautifulSoup(response.text, "html.parser")
 
-    for tag in soup(["script", "style", "noscript"]):
+    for tag in soup(["meta", "script", "style", "noscript"]):
         tag.decompose()
 
-    text = soup.get_text(separator="\n")
-    lines = [line.strip() for line in text.splitlines() if line.strip()]
-    return "\n".join(lines[:1000])
+    formatted_html = soup.prettify()
+    return {
+        "url": url,
+        "html": formatted_html[:100000]  
+    }
 
 def extract_text_from_url_customised(url):
     page = requests.get(url)
