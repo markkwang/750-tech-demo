@@ -1,4 +1,4 @@
-# 732-tech-demo - Web Summariser
+# 732-tech-demo **🧠 Web Summariser**
 
 A fullstack application that allows users to **input a website URL**, then scrapes and summarises the content using **Flask**, **BeautifulSoup**, and **OpenAI GPT-4.1-mini**.
 
@@ -18,7 +18,7 @@ cd 750-tech-demo
 ### 1. Set up Backend environment
 
 - Make sure you have python3 installed (3.11.11 recommended).
-- Suggest to use Conda for virtual environment.
+- Suggested to use Conda for virtual environment.
 
 #### Install libraries
 
